@@ -85,7 +85,7 @@ public class CalendarDialog {
 
     }
 
-    public boolean setCalendarOfTheDayBegin(Calendar calendar) {
+    private boolean setCalendarOfTheDayBegin(Calendar calendar) {
 
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
