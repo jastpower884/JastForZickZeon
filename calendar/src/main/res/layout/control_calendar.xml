@@ -6,18 +6,18 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#26A69A"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        android:orientation="horizontal">
 
         <!-- prev button -->
         <ImageView
             android:id="@+id/calendar_prev_year_button"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/ic_previous_black_24dp" />
+            android:src="@drawable/ic_previous_24dp" />
 
         <!-- date title -->
         <TextView
@@ -27,15 +27,24 @@
             android:gravity="center"
             android:padding="10dp"
             android:text="current date"
-            android:textAppearance="@android:style/TextAppearance.Medium"
-            android:textColor="#222222" />
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textColor="#FFF" />
 
         <!-- next button -->
         <ImageView
             android:id="@+id/calendar_next_year_button"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/ic_next_black_24dp" />
+            android:src="@drawable/ic_next_24dp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#26A69A"
+        android:gravity="center">
 
 
         <!-- prev button -->
@@ -43,7 +52,7 @@
             android:id="@+id/calendar_prev_month_button"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/ic_previous_black_24dp" />
+            android:src="@drawable/ic_previous_24dp" />
 
         <!-- date title -->
         <TextView
@@ -53,18 +62,15 @@
             android:gravity="center"
             android:padding="10dp"
             android:text="current date"
-            android:textAppearance="@android:style/TextAppearance.Medium"
-            android:textColor="#222222" />
+            android:textAppearance="@android:style/TextAppearance.Large"
+            android:textColor="#FFF" />
 
         <!-- next button -->
         <ImageView
             android:id="@+id/calendar_next_month_button"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_next_black_24dp" />
+            android:src="@drawable/ic_next_24dp" />
 
     </LinearLayout>
 
