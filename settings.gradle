@@ -1,1 +1,1 @@
-include ':app', ':calendar'
+include ':calendar-dialog-demo', ':calendar'
