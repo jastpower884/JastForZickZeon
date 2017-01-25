@@ -6,12 +6,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.jastzeonic.calendar.CalendarDialog;
+import com.jastzeonic.calendar.CalendarListDialog;
 
 public class MainActivity extends AppCompatActivity {
 
 
     CalendarDialog mCalendarDialog;
-
+    CalendarListDialog mCalendarListDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,13 @@ public class MainActivity extends AppCompatActivity {
 
         mCalendarDialog = new CalendarDialog(this);
         mCalendarDialog.callCalendarView(null, (TextView) view);
+
+    }
+
+    public void onClick2(View view) {
+
+        mCalendarListDialog = new CalendarListDialog(this);
+        mCalendarListDialog.callCalendarView(null, (TextView) view);
 
     }
 }

@@ -8,7 +8,7 @@
 
 
 
-        <com.jastzeonic.calendar.CalendarView
+        <com.jastzeonic.calendar.SimpleCalendarView
             android:id="@+id/calendar_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

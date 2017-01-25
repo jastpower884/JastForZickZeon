@@ -25,7 +25,7 @@ public class CalendarDialog {
 
 
     public void callCalendarView(TextView startDate, final TextView setTextView) {
-        CalendarView customCalendarView = (CalendarView) dialog.findViewById(R.id.calendar_view);
+        SimpleCalendarView customSimpleCalendarView = (SimpleCalendarView) dialog.findViewById(R.id.calendar_view);
 
 
         Calendar maxDate = Calendar.getInstance();
@@ -62,10 +62,10 @@ public class CalendarDialog {
         final long maxDateTime = maxDate.getTimeInMillis();
 
 
-        customCalendarView.setMinDate(minDateTime);
-        customCalendarView.setMaxDate(maxDateTime);
+        customSimpleCalendarView.setMinDate(minDateTime);
+        customSimpleCalendarView.setMaxDate(maxDateTime);
 
-        customCalendarView.setEventHandler(new CalendarView.EventHandler() {
+        customSimpleCalendarView.setEventHandler(new SimpleCalendarView.EventHandler() {
             @Override
             public void onDayLongPress(Calendar calendar) {
 

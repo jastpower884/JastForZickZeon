@@ -28,7 +28,7 @@
     </declare-styleable>
     <!--第三方元件 WheelPicker 所用-->
 
-    <declare-styleable name="CalendarView">
+    <declare-styleable name="SimpleCalendarView">
         <attr name="dateFormat" format="string" />
     </declare-styleable>
 </resources>

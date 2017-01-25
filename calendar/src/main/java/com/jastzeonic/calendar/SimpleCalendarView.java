@@ -2,10 +2,20 @@ package com.jastzeonic.calendar;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,7 +23,7 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Locale;
 
-public class CalendarView extends GridView {
+public class SimpleCalendarView extends LinearLayout {
     // for logging
     private static final String LOGTAG = "Calendar_View";
 
@@ -32,7 +42,6 @@ public class CalendarView extends GridView {
     // date format
     private String dateFormat;
 
-
     // current displayed month
     private Calendar currentDate = Calendar.getInstance();
 
@@ -43,21 +52,29 @@ public class CalendarView extends GridView {
     private Calendar maxDate;
 
     //event handling
-    private CalendarEventHandler calendarEventHandler = null;
+    private EventHandler eventHandler = null;
+
+    // internal components
+    private ImageView btnPrevYear;
+    private ImageView btnNextYear;
+    private TextView txtDateYear;
+    private ImageView buttonPrevMonth;
+    private ImageView buttonNextMonth;
+    private TextView txtDateMonth;
 
     // month-season association (northern hemisphere, sorry australia :)
     int[] monthSeason = new int[]{2, 2, 3, 3, 3, 0, 0, 0, 1, 1, 1, 2};
 
-    public CalendarView(Context context) {
+    public SimpleCalendarView(Context context) {
         super(context);
     }
 
-    public CalendarView(Context context, AttributeSet attrs) {
+    public SimpleCalendarView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initControl(context, attrs);
     }
 
-    public CalendarView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SimpleCalendarView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initControl(context, attrs);
     }
@@ -66,10 +83,11 @@ public class CalendarView extends GridView {
      * Load control xml layout
      */
     private void initControl(Context context, AttributeSet attrs) {
-//        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        inflater.inflate(R.layout.control_calendar, this);
-        this.setNumColumns(7);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater.inflate(R.layout.control_calendar, this);
+
         loadDateFormat(attrs);
+        assignUiElements();
         assignClickHandlers();
 
         updateCalendar();
@@ -88,32 +106,51 @@ public class CalendarView extends GridView {
         }
     }
 
+    private void assignUiElements() {
+        // layout is inflated, assign local variables to components
+        btnPrevYear = (ImageView) findViewById(R.id.calendar_prev_year_button);
+        btnNextYear = (ImageView) findViewById(R.id.calendar_next_year_button);
+        txtDateYear = (TextView) findViewById(R.id.calendar_date_year_display);
+        buttonPrevMonth = (ImageView) findViewById(R.id.calendar_prev_month_button);
+        buttonNextMonth = (ImageView) findViewById(R.id.calendar_next_month_button);
+        txtDateMonth = (TextView) findViewById(R.id.calendar_date_month_display);
+
+    }
 
     private void assignClickHandlers() {
-
-
-        // press a day
-        this.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
+        // add one month and refresh UI
+        btnNextYear.setOnClickListener(new OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Calendar theDayPress = (Calendar) parent.getItemAtPosition(position);
-
-                // if the date is not during max date or min date
-                // maybe I should not use during
-                if (!isTheDateBeforeMaxDate(theDayPress) || !isTheDateAfterMinDate(theDayPress)) {
-                    return;
-                }
-
-                view.setSelected(true);
-
-                if (calendarEventHandler == null)
-                    return;
-
-                calendarEventHandler.onDayPress(theDayPress);
+            public void onClick(View v) {
+                currentDate.add(Calendar.YEAR, 1);
+                updateCalendar();
             }
+        });
 
+        // subtract one month and refresh UI
+        btnPrevYear.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentDate.add(Calendar.YEAR, -1);
+                updateCalendar();
+            }
+        });
+
+        buttonNextMonth.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentDate.add(Calendar.MONTH, 1);
+                updateCalendar();
+            }
+        });
+
+        // subtract one month and refresh UI
+        buttonPrevMonth.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentDate.add(Calendar.MONTH, -1);
+                updateCalendar();
+            }
         });
 
     }
@@ -121,7 +158,7 @@ public class CalendarView extends GridView {
     /**
      * Check input date before Max Date if maxDate not null
      */
-    protected boolean isTheDateBeforeMaxDate(Calendar date) {
+    private boolean isTheDateBeforeMaxDate(Calendar date) {
         // if minDate is null,then forget it.
         return maxDate == null || date.before(maxDate);
 
@@ -132,7 +169,7 @@ public class CalendarView extends GridView {
     /**
      * Check input date after Min Date if maxDate not null
      */
-    protected boolean isTheDateAfterMinDate(Calendar date) {
+    private boolean isTheDateAfterMinDate(Calendar date) {
         // if minDate is null,then forget it.
         return minDate == null || date.after(minDate);
 
@@ -169,11 +206,13 @@ public class CalendarView extends GridView {
         }
 
         // update grid
-        this.setAdapter(new CalendarAdapter(this, getContext(), cells, events));
 
         // update title
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_YEAR, Locale.getDefault());
         SimpleDateFormat sdf2 = new SimpleDateFormat(DATE_FORMAT_MONTH, Locale.getDefault());
+
+        txtDateYear.setText(sdf.format(currentDate.getTime()));
+        txtDateMonth.setText(sdf2.format(currentDate.getTime()));
 
 //        // set header color according to current season
 //        int month = currentDate.get(Calendar.MONTH);
@@ -182,13 +221,19 @@ public class CalendarView extends GridView {
 //
 //        header.setBackgroundColor(ContextCompat.getColor(this.getContext(), color));
     }
-
-
     /**
      * Assign event handler to be passed needed events
      */
-    public void setCalendarEventHandler(CalendarEventHandler calendarEventHandler) {
-        this.calendarEventHandler = calendarEventHandler;
+    public void setEventHandler(EventHandler eventHandler) {
+        this.eventHandler = eventHandler;
+    }
+
+    /**
+     * This interface defines what events to be reported to
+     * the outside world
+     */
+    public interface EventHandler {
+        void onDayLongPress(Calendar date);
     }
 
     /**
@@ -222,14 +267,5 @@ public class CalendarView extends GridView {
     public void setMinDate(long minDateMillionSecond) {
         minDate = Calendar.getInstance();
         minDate.setTimeInMillis(minDateMillionSecond);
-    }
-
-
-    public Calendar getCurrentDate() {
-        return currentDate;
-    }
-
-    public void setCurrentDate(Calendar currentDate) {
-        this.currentDate = currentDate;
     }
 }
