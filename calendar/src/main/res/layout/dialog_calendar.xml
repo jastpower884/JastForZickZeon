@@ -39,7 +39,6 @@
             android:gravity="center">
 
 
-
             <!-- date title -->
             <TextView
                 android:id="@+id/calendar_date_month_display"

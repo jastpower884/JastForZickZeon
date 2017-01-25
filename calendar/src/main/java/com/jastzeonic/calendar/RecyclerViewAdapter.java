@@ -39,7 +39,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
             Calendar calendar = (Calendar) items.get(position).clone();
             calendar.setTimeInMillis(items.get(position).getTimeInMillis());
             calendar.add(Calendar.MONTH, -1);
-            Log.v("CalendarListDialog", "MONTH:" + calendar.get(Calendar.MONTH));
             items.add(0, calendar);
             holder.mCalendarView.postDelayed(new Runnable() {
                 @Override
@@ -50,9 +49,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
 
         } else if (position == items.size() - 2) {
             Calendar calendar = (Calendar) items.get(items.size() - 1).clone();
-//            calendar.setTimeInMillis(items.get(items.size() - 1).getTimeInMillis());
             calendar.add(Calendar.MONTH, 1);
-            Log.v("CalendarListDialog", "MONTH:" + calendar.get(Calendar.MONTH));
             items.add(calendar);
             holder.mCalendarView.postDelayed(new Runnable() {
                 @Override
