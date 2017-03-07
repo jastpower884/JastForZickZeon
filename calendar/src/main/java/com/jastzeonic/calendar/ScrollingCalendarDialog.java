@@ -155,7 +155,7 @@ public class ScrollingCalendarDialog {
 
         mTextViewYear.setText(sdf.format(currentDate.getTime()));
         mTextViewMonth.setText((sdf2.format(currentDate.getTime())));
-        
+
         dialog.show();
 
     }
