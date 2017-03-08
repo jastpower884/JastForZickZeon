@@ -29,7 +29,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClick2(View view) {
 
-        mScrollingCalendarDialog = new ScrollingCalendarDialog(this);
+        if (mScrollingCalendarDialog == null) {
+            mScrollingCalendarDialog = new ScrollingCalendarDialog(this);
+        }
         mScrollingCalendarDialog.callCalendarView(null, (TextView) view);
 
     }

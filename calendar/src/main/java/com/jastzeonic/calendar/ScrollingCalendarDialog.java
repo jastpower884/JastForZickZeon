@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -149,6 +150,15 @@ public class ScrollingCalendarDialog {
         }
 
         Calendar currentDate = Calendar.getInstance();
+
+
+        SimpleDateFormat sdfResource = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+        try {
+            currentDate.setTime(sdfResource.parse(setTextView.getText().toString()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
 
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_YEAR, Locale.getDefault());
         SimpleDateFormat sdf2 = new SimpleDateFormat(DATE_FORMAT_MONTH, Locale.getDefault());
