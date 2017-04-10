@@ -155,6 +155,12 @@ public class SimpleCalendarView extends LinearLayout {
 
     }
 
+
+    public void resetCurrentDate() {
+        currentDate = Calendar.getInstance();
+    }
+
+
     /**
      * Check input date before Max Date if maxDate not null
      */
@@ -221,6 +227,7 @@ public class SimpleCalendarView extends LinearLayout {
 //
 //        header.setBackgroundColor(ContextCompat.getColor(this.getContext(), color));
     }
+
     /**
      * Assign event handler to be passed needed events
      */

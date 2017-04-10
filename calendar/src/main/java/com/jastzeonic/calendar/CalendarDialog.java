@@ -2,6 +2,7 @@ package com.jastzeonic.calendar;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.text.TextUtils;
 import android.widget.TextView;
 
 import java.text.ParseException;
@@ -33,7 +34,7 @@ public class CalendarDialog {
         Calendar minDate = Calendar.getInstance();
 
 
-        if (startDate != null) {
+        if (startDate != null && !TextUtils.isEmpty(startDate.getText())) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
             try {
                 maxDate.setTime(sdf.parse(startDate.getText().toString()));
@@ -43,6 +44,8 @@ public class CalendarDialog {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+        } else {
+            customSimpleCalendarView.resetCurrentDate();
         }
 
         setCalendarOfTheDayBegin(maxDate);

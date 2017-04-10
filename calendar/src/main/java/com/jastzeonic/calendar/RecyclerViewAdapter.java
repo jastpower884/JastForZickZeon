@@ -66,4 +66,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
     public int getItemCount() {
         return items.size();
     }
+
+    public void updateItems(List<Calendar> items) {
+        this.items = items;
+        this.notifyDataSetChanged();
+
+    }
+
 }
