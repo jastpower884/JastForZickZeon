@@ -8,6 +8,8 @@ import android.widget.TextView;
 import com.jastzeonic.calendar.CalendarDialog;
 import com.jastzeonic.calendar.ScrollingCalendarDialog;
 
+import java.util.Calendar;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -32,7 +34,13 @@ public class MainActivity extends AppCompatActivity {
         if (mScrollingCalendarDialog == null) {
             mScrollingCalendarDialog = new ScrollingCalendarDialog(this);
         }
-        mScrollingCalendarDialog.callCalendarView(null, (TextView) view);
+        mScrollingCalendarDialog.callCalendarView(null, new ScrollingCalendarDialog.CallBack() {
+            @Override
+            public boolean onDateClick(String clickDate, Calendar calender) {
+
+                return true;
+            }
+        });
 
     }
 }

@@ -24,6 +24,13 @@ import java.util.Locale;
 public class ScrollingCalendarDialog {
 
 
+    public interface CallBack {
+        /**
+         * return 是否關閉對話框
+         */
+        boolean onDateClick(String clickDate, Calendar calender);
+    }
+
     private static final String DATE_FORMAT_YEAR = "yyyy";
     private static final String DATE_FORMAT_MONTH = "MMM";
 
@@ -37,6 +44,8 @@ public class ScrollingCalendarDialog {
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter recyclerViewAdapter;
 
+//    private CallBack callBack;
+
     public ScrollingCalendarDialog(Context context) {
         this.context = context;
 
@@ -45,7 +54,7 @@ public class ScrollingCalendarDialog {
 
     private int currentPosition;
 
-    public void callCalendarView(TextView startDate, final TextView setTextView) {
+    public void callCalendarView(String startDate, final CallBack callBack) {
 
 
         dialog = new Dialog(context, R.style.NewDialog);
@@ -101,8 +110,8 @@ public class ScrollingCalendarDialog {
         Calendar currentDate = Calendar.getInstance();
         SimpleDateFormat sdfResource = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
         try {
-            currentDate.setTime(sdfResource.parse(setTextView.getText().toString()));
-        } catch (ParseException e) {
+            currentDate.setTime(sdfResource.parse(startDate));
+        } catch (ParseException | NullPointerException e) {
             e.printStackTrace();
         }
 
@@ -114,8 +123,9 @@ public class ScrollingCalendarDialog {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
 
                 String selectTime = sdf.format(date.getTime());
-                setTextView.setText(selectTime);
-                dialog.dismiss();
+                if (callBack.onDateClick(selectTime, date)) {
+                    dialog.dismiss();
+                }
             }
         });
 
