@@ -17,12 +17,32 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     private List<Calendar> items;
     private CalendarEventHandler eventHandler;
+    // date min which user can select
+    private Calendar minDate;
+    // date max which user can select
+    private Calendar maxDate;
+
+
+    public RecyclerViewAdapter(List<Calendar> items, Calendar minDate, Calendar maxDate, CalendarEventHandler eventHandler) {
+        this.items = items;
+        this.eventHandler = eventHandler;
+        this.minDate = minDate;
+        this.maxDate = maxDate;
+    }
+
 
     public RecyclerViewAdapter(List<Calendar> items, CalendarEventHandler eventHandler) {
         this.items = items;
         this.eventHandler = eventHandler;
     }
 
+    public void setMinDate(Calendar minDate) {
+        this.minDate = minDate;
+    }
+
+    public void setMaxDate(Calendar maxDate) {
+        this.maxDate = maxDate;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -34,6 +54,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.mCalendarView.getCurrentDate().setTimeInMillis(items.get(position).getTimeInMillis());
         holder.mCalendarView.updateCalendar();
+
+        holder.mCalendarView.setMinDate(minDate);
+        holder.mCalendarView.setMaxDate(maxDate);
 
         if (position == 0) {
             Calendar calendar = (Calendar) items.get(position).clone();

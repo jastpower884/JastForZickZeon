@@ -25,9 +25,6 @@ public class ScrollingCalendarDialog {
 
 
     public interface CallBack {
-        /**
-         * return 是否關閉對話框
-         */
         boolean onDateClick(String clickDate, Calendar calender);
     }
 
@@ -37,14 +34,6 @@ public class ScrollingCalendarDialog {
     public static final String TAG = "ScrollingCalendarDialog";
 
     private Context context;
-    private Dialog dialog;
-
-    private TextView mTextViewYear;
-    private TextView mTextViewMonth;
-    private RecyclerView mRecyclerView;
-    private RecyclerViewAdapter recyclerViewAdapter;
-
-//    private CallBack callBack;
 
     public ScrollingCalendarDialog(Context context) {
         this.context = context;
@@ -54,14 +43,64 @@ public class ScrollingCalendarDialog {
 
     private int currentPosition;
 
+    public void callCalendarView(CallBack callBack) {
+        callCalendarView(null, callBack);
+
+    }
+
     public void callCalendarView(String startDate, final CallBack callBack) {
+        callCalendarView(startDate, null, null, callBack);
+
+    }
+
+    public void callCalendarView(String startDate, String minDate, String maxDate, CallBack callBack) {
+
+        Calendar currentDate = Calendar.getInstance();
+        SimpleDateFormat sdfResource = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+        try {
+            currentDate.setTime(sdfResource.parse(startDate));
+        } catch (ParseException | NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        Calendar minCalender = null;
+        if (minDate != null) {
+            try {
+                minCalender = Calendar.getInstance();
+                minCalender.setTime(sdfResource.parse(minDate));
+
+            } catch (ParseException | NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Calendar maxCalender = null;
+        if (maxDate != null) {
+
+            try {
+                maxCalender = Calendar.getInstance();
+                maxCalender.setTime(sdfResource.parse(maxDate));
+
+            } catch (ParseException | NullPointerException e) {
+                e.printStackTrace();
+            }
+
+        }
 
 
-        dialog = new Dialog(context, R.style.NewDialog);
+        callCalendarView(currentDate, minCalender, maxCalender, callBack);
+
+    }
+
+
+    public void callCalendarView(Calendar currentDate, Calendar minDate, Calendar maxDate, final CallBack callBack) {
+
+
+        final Dialog dialog = new Dialog(context, R.style.NewDialog);
         dialog.setContentView(R.layout.dialog_calendar);
-        mRecyclerView = (RecyclerView) dialog.findViewById(R.id.recycler_view);
-        mTextViewYear = (TextView) dialog.findViewById(R.id.calendar_date_year_display);
-        mTextViewMonth = (TextView) dialog.findViewById(R.id.calendar_date_month_display);
+        final RecyclerView mRecyclerView = (RecyclerView) dialog.findViewById(R.id.recycler_view);
+        final TextView mTextViewYear = (TextView) dialog.findViewById(R.id.calendar_date_year_display);
+        final TextView mTextViewMonth = (TextView) dialog.findViewById(R.id.calendar_date_month_display);
 
         LinearSnapHelper helper = new LinearSnapHelper() {
             @Override
@@ -107,17 +146,9 @@ public class ScrollingCalendarDialog {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 
 
-        Calendar currentDate = Calendar.getInstance();
-        SimpleDateFormat sdfResource = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
-        try {
-            currentDate.setTime(sdfResource.parse(startDate));
-        } catch (ParseException | NullPointerException e) {
-            e.printStackTrace();
-        }
-
         List<Calendar> items = getCalendars(currentDate.get(Calendar.MONTH));
 
-        recyclerViewAdapter = new RecyclerViewAdapter(items, new CalendarEventHandler() {
+        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(items, new CalendarEventHandler() {
             @Override
             public void onDayPress(Calendar date) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
@@ -128,6 +159,10 @@ public class ScrollingCalendarDialog {
                 }
             }
         });
+
+        recyclerViewAdapter.setMinDate(minDate);
+        recyclerViewAdapter.setMaxDate(maxDate);
+
 
         mRecyclerView.setAdapter(recyclerViewAdapter);
         mRecyclerView.setNestedScrollingEnabled(false);

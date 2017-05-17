@@ -34,7 +34,16 @@ public class MainActivity extends AppCompatActivity {
         if (mScrollingCalendarDialog == null) {
             mScrollingCalendarDialog = new ScrollingCalendarDialog(this);
         }
-        mScrollingCalendarDialog.callCalendarView(null, new ScrollingCalendarDialog.CallBack() {
+//        mScrollingCalendarDialog.callCalendarView(null, new ScrollingCalendarDialog.CallBack() {
+//            @Override
+//            public boolean onDateClick(String clickDate, Calendar calender) {
+//
+//                return true;
+//            }
+//        });
+
+
+        mScrollingCalendarDialog.callCalendarView(null,"2017/05/01",null, new ScrollingCalendarDialog.CallBack() {
             @Override
             public boolean onDateClick(String clickDate, Calendar calender) {
 
